@@ -3,7 +3,9 @@ package com.azet.ecommerce.dao;
 import com.azet.ecommerce.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
-@RepositoryRestResource(collectionResourceRel = "product")
+@CrossOrigin("http://localhost:4200")
+@RepositoryRestResource(collectionResourceRel = "products")
 interface ProductRepository extends JpaRepository<Product, Long> {
 }
