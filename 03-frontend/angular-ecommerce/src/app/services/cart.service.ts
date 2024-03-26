@@ -22,12 +22,7 @@ export class CartService {
     if(this.cartItems.length>0){
        //find the item in the cart based on item id
 
-       for(let tempCartItem of this.cartItems){
-        if(tempCartItem.id === theCartItem.id) {
-          existingCartItem = tempCartItem;
-          break;
-        }
-       }
+      existingCartItem = this.cartItems.find(item => item.id === theCartItem.id)!;  //kopiowanie przez referenję
 
       //check if we found it
       alreadyExistsInCart = (existingCartItem != undefined);
