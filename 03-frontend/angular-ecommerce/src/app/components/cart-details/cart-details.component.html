@@ -6,7 +6,22 @@
                     <tr>
                         <th width="20%">Product Image</th>
                         <th width="50%">Product Details</th>
-                        <th width="30%">Product Image</th>
+                        <th width="30%"></th>
+                    </tr>
+                    <tr *ngFor="let tempCartItem of cartItems">
+                        <td>
+                            <img src="{{ tempCartItem.imageUrl }}" class="img-responsive" width="150px">
+                        </td>
+                        <td>
+                            <p> {{ tempCartItem.name }}</p>
+                            <p> {{ tempCartItem.unitPrice | currency:'USD'}} </p>
+                        </td>
+                        <td>
+                            <div class="items">
+                                <p> Quantity: {{ tempCartItem.quantity }}</p>
+                            </div>
+                            
+                        </td>
                     </tr>
                     
                 </table>
