@@ -34,7 +34,7 @@ export class CartService {
     }
 
     if(alreadyExistsInCart){
-      existingCartItem.quantity++;
+      existingCartItem.quantity++;      //in js passing by reference
     }
     else{
       //just add to array
