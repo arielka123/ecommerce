@@ -89,10 +89,14 @@ a{
     display:inline-block
 }
 
-a:active,a:focus,a:hover{
-    text-decoration:none;
-    outline:0
+a:link{
+    text-decoration: none;
+    outline: 0;
 }
+ a:active,a:focus,a:hover{
+    text-decoration: none;
+    outline:0
+ } 
 
 a,a:hover{
     -webkit-transition:all .3s ease;
@@ -945,7 +949,7 @@ footer ul li{
         margin-right:15px
     }
         .main-content.page-m{
-        padding:10% 0!important
+        padding:10% 30% 20% 5%
     }
     .header-mobile .navbar-mobile{
         display:none;
