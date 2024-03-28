@@ -22,4 +22,11 @@ export class CheckoutComponent implements OnInit {
     });
   }
 
+  onSubmit(){
+    console.log("Handlink the submit button");
+    console.log(this.checkoutFormGroup.get('customer')?.value);
+    console.log("The email adress is  " + this.checkoutFormGroup.get('customer')?.value.email);
+
+  }
+
 }
