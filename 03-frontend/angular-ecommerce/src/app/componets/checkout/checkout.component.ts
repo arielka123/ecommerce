@@ -36,8 +36,8 @@ export class CheckoutComponent implements OnInit {
         zipcode: ['']
       }),
 
-      creditCardInformation: this.formBuilder.group({
-        cartType: [''],
+      creditCard: this.formBuilder.group({
+        cardType: [''],
         nameOnCard: [''],
         cardNumber: [''],
         securityCode: [''],
