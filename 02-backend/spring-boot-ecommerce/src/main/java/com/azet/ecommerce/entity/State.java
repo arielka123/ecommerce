@@ -6,7 +6,7 @@ import lombok.Data;
 @Entity
 @Table(name="state")
 @Data
-class State {
+public class State {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +19,5 @@ class State {
 
     @ManyToOne
     @JoinColumn(name = "country_id")
-    @Column(name="country")
-    private String country;
+    private Country country;
 }
