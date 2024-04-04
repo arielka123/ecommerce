@@ -9,7 +9,7 @@ import lombok.Data;
 import java.util.Set;
 
 @Data
-class Purchase {
+public class Purchase {
 
     private Customer customer;
     private Address shippingAddress;
