@@ -5,6 +5,11 @@ import { Country } from 'src/app/common/country';
 import { State } from 'src/app/common/state';
 import { Luv2ShopValidators } from 'src/app/valdators/luv2-shop-validators';
 import { CartService } from 'src/app/services/cart.service';
+import { CheckoutService } from '../../services/checkout.service';
+import { Router } from '@angular/router';
+import { Order } from 'src/app/common/order';
+import { OrderItem } from 'src/app/common/order-item';
+import { Purchase } from 'src/app/common/purchase';
 
 @Component({
   selector: 'app-checkout',
@@ -28,7 +33,9 @@ export class CheckoutComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, 
               private Luv2ShopFormService: Luv2ShopFormService,
-              private cartService: CartService) { }
+              private cartService: CartService,
+              private checkoutService: CheckoutService,
+              private router: Router) { }
 
   ngOnInit(): void {
 
@@ -171,19 +178,100 @@ export class CheckoutComponent implements OnInit {
 
   onSubmit(){
     console.log("Handlink the submit button");
+    console.log("test ->");
+    console.log(this.checkoutFormGroup.controls['shippingAddress'].value);
 
     if(this.checkoutFormGroup.invalid) {
       this.checkoutFormGroup.markAllAsTouched();
+      return;
     }
 
+    //set up order
+    let order = new Order;
+    order.totalPrice = this.totalPrice;
+    order.totalQuantity - this.totalQunatity;
 
-    console.log(this.checkoutFormGroup.get('customer')?.value);
-    console.log("The email address is  " + this.checkoutFormGroup.get('customer')?.value.email);
+    //get cart items
+    const cartItems = this.cartService.cartItems;
 
-    console.log("The shipping address country is  " + this.checkoutFormGroup.get('shippingAddress')?.value.country.name);
-    console.log("The shipping address state is  " + this.checkoutFormGroup.get('shippingAddress')?.value.state.name);
+    //create orderItems from cartItems
+    //-long way
+    /*
+
+    
+    let orderItems = [];
+    
+    for(let i=0; i <cartItems.length; i++){
+      orderItems[i] = new OrderItem(cartItems[i]);
+    }
+    */
+
+    //- short way
+    let orderItems: OrderItem[] = cartItems.map(tempCartItem => new OrderItem(tempCartItem));
 
 
+    //set up purchase 
+    let purchase = new Purchase();
+
+    //populate purchase- customer, addresses, order and orderItems
+    //-customer
+    purchase.customer = this.checkoutFormGroup.controls['customer'].value;
+
+
+    //-addresses
+    purchase.shippingAddress = this.checkoutFormGroup.controls['shippingAddress'].value;
+
+    const shippingState: State = JSON.parse(JSON.stringify(purchase.shippingAddress.state))
+    const shippingCountry: Country = JSON.parse(JSON.stringify(purchase.shippingAddress.country))
+    purchase.shippingAddress.state = shippingState.name;
+    purchase.shippingAddress.country = shippingCountry.name;
+
+    purchase.billingAddress = this.checkoutFormGroup.controls['billingAddress'].value;
+    const billingState: State = JSON.parse(JSON.stringify(purchase.billingAddress.state))
+    const billingCountry: Country = JSON.parse(JSON.stringify(purchase.billingAddress.country))
+    purchase.billingAddress.state = billingState.name;
+    purchase.billingAddress.country = billingCountry.name;
+
+
+    //-order and orderItems
+    purchase.order = order;
+    purchase.orderItems = orderItems;
+
+    //call reat api via checkoutService
+    this.checkoutService.placeOrder(purchase).subscribe(
+      {
+        next: response => { 
+          alert(`Your order has been received. \nOrder tracking number: ${response.orderTrackingNumber} `)
+        
+          //reset cart
+          this.resetCart();
+        },
+
+        error: err => {
+          alert(`There was an error: ${err.message}`)
+        }
+      }
+    );
+
+
+    // console.log(this.checkoutFormGroup.get('customer')?.value);
+    // console.log("The email address is  " + this.checkoutFormGroup.get('customer')?.value.email);
+
+    // console.log("The shipping address country is  " + this.checkoutFormGroup.get('shippingAddress')?.value.country.name);
+    // console.log("The shipping address state is  " + this.checkoutFormGroup.get('shippingAddress')?.value.state.name);
+  }
+
+  resetCart() {
+    //reset cart data
+    this.cartService.cartItems = [];
+    this.cartService.totalPrice.next(0);
+    this.cartService.totalQuantity.next(0);
+
+    //reset form data
+    this.checkoutFormGroup.reset();
+
+    //navigate to product page
+    this.router.navigateByUrl("/products")
   }
 
   handleMonthsAndYears() {
