@@ -65,7 +65,7 @@ export class CheckoutComponent implements OnInit {
                                   Luv2ShopValidators.notOnlyWhitespace]),
         state: new FormControl('', [Validators.required]),
         country: new FormControl('', [Validators.required]),
-        zipcode: new FormControl('', [Validators.required,
+        zipCode: new FormControl('', [Validators.required,
                                       Luv2ShopValidators.notOnlyWhitespace])
       }),
 
@@ -76,7 +76,7 @@ export class CheckoutComponent implements OnInit {
                                   Luv2ShopValidators.notOnlyWhitespace]),
         state: new FormControl('', [Validators.required]),
         country: new FormControl('', [Validators.required]),
-        zipcode: new FormControl('', [Validators.required,
+        zipCode: new FormControl('', [Validators.required,
                                      Luv2ShopValidators.notOnlyWhitespace])
       }),
 
@@ -145,13 +145,13 @@ export class CheckoutComponent implements OnInit {
   get shippingAddressCity(){ return this.checkoutFormGroup.get('shippingAddress.city'); }
   get shippingAddressState(){ return this.checkoutFormGroup.get('shippingAddress.state'); }
   get shippingAddressCountry(){ return this.checkoutFormGroup.get('shippingAddress.country'); }
-  get shippingAddressZipCode(){ return this.checkoutFormGroup.get('shippingAddress.zipcode'); }
+  get shippingAddressZipCode(){ return this.checkoutFormGroup.get('shippingAddress.zipCode'); }
 
   get billingAddressStreet(){ return this.checkoutFormGroup.get('billingAddress.street'); }
   get billingAddressCity(){ return this.checkoutFormGroup.get('billingAddress.city'); }
   get billingAddressState(){ return this.checkoutFormGroup.get('billingAddress.state'); }
   get billingAddressCountry(){ return this.checkoutFormGroup.get('billingAddress.country'); }
-  get billingAddressZipCode(){ return this.checkoutFormGroup.get('billingAddress.zipcode'); }
+  get billingAddressZipCode(){ return this.checkoutFormGroup.get('billingAddress.zipCode'); }
 
   get creditCardType() { return this.checkoutFormGroup.get('creditCard.cardType'); }
   get creditCardNameOnCard() { return this.checkoutFormGroup.get('creditCard.nameOnCard'); }
