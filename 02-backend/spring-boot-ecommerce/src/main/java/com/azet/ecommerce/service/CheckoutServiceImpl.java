@@ -41,8 +41,8 @@ class CheckoutServiceImpl implements CheckoutService{
         Address billingAddress = purchase.getBillingAddress();
         order.setBillingAddress(billingAddress);
 
-        Address shippingAddress = purchase.getBillingAddress();
-        order.setBillingAddress(shippingAddress);
+        Address shippingAddress = purchase.getShippingAddress();
+        order.setShippingAddress(shippingAddress);
 
         //populate customer with order
         Customer customer = purchase.getCustomer();

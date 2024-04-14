@@ -179,7 +179,11 @@ export class CheckoutComponent implements OnInit {
   onSubmit(){
     console.log("Handlink the submit button");
     console.log("test ->");
-    console.log(this.checkoutFormGroup.controls['shippingAddress'].value);
+    console.log("shippingAddress: ");
+    console.log( this.checkoutFormGroup.controls['shippingAddress'].value);
+    console.log("billingAdress: ");
+    console.log( this.checkoutFormGroup.controls['billingAddress'].value);
+
 
     if(this.checkoutFormGroup.invalid) {
       this.checkoutFormGroup.markAllAsTouched();
@@ -189,7 +193,7 @@ export class CheckoutComponent implements OnInit {
     //set up order
     let order = new Order;
     order.totalPrice = this.totalPrice;
-    order.totalQuantity - this.totalQunatity;
+    order.totalQuantity = this.totalQunatity;
 
     //get cart items
     const cartItems = this.cartService.cartItems;
