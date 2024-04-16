@@ -13,7 +13,6 @@ import myAppConfig from 'src/app/config/my-app-config';
 export class LoginComponent implements OnInit {
 
   oktaSignin: any;
-  oktaService: any;
   
   constructor(@Inject(OKTA_AUTH) private oktaAuth: OktaAuth) {
     
