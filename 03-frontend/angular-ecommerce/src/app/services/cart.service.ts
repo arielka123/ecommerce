@@ -12,7 +12,19 @@ export class CartService {
   totalPrice: Subject<number> = new BehaviorSubject<number>(0.00);  //subclass of obsevervable. Publish events
   totalQuantity: Subject<number> = new BehaviorSubject<number>(0);
 
-  constructor() { }
+  storage: Storage = sessionStorage;
+
+  constructor() { 
+    //read the data for storage
+    let data = JSON.parse(this.storage.getItem('cartItems')!);
+
+    if(data != null){
+      this.cartItems = data;
+
+      //compute totals based on the data that is read from storage
+      this.computeCartTotals();
+    }
+  }
 
   addToCart(theCartItem: CartItem){
     //check if we already have the item in our cart
@@ -83,6 +95,13 @@ export class CartService {
 
     //log cart data for debugging
     this.logCartData(totalPriceValue, totalQuntityValue);
+
+    //persist cast data
+    this.persisCartItems();
+  }
+
+  persisCartItems(){
+   this.storage.setItem('cartItems', JSON.stringify(this.cartItems));
   }
 
 
