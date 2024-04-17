@@ -12,7 +12,8 @@ export class CartService {
   totalPrice: Subject<number> = new BehaviorSubject<number>(0.00);  //subclass of obsevervable. Publish events
   totalQuantity: Subject<number> = new BehaviorSubject<number>(0);
 
-  storage: Storage = sessionStorage;
+  // storage: Storage = sessionStorage;
+  storage: Storage = localStorage;
 
   constructor() { 
     //read the data for storage
