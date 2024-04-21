@@ -10,6 +10,8 @@ import { CartService } from './cart.service';
 export class CheckoutService {
 
   theCartService: CartService;
+  
+  storage: Storage = localStorage;
 
 
   private purchaseUrl = "http://localhost:8080/api/checkout/purchase";
@@ -19,7 +21,8 @@ export class CheckoutService {
    }
 
   placeOrder(purchase: Purchase): Observable<any> {
-    this.theCartService.cartItems = [];
+    // this.theCartService.cartItems = [];
+    this.storage.clear();
     
     return this.httpClient.post<Purchase>(this.purchaseUrl, purchase);
   }

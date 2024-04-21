@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { Order } from 'src/app/common/order';
 import { OrderItem } from 'src/app/common/order-item';
 import { Purchase } from 'src/app/common/purchase';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-checkout',
@@ -30,6 +31,7 @@ export class CheckoutComponent implements OnInit {
   shippingAddressStates: State[] = [];
   billingAddressStates: State[] = [];
 
+  storage: Storage = sessionStorage;
 
   constructor(private formBuilder: FormBuilder, 
               private Luv2ShopFormService: Luv2ShopFormService,
@@ -40,6 +42,9 @@ export class CheckoutComponent implements OnInit {
   ngOnInit(): void {
 
     this.reviewCardDetails(); 
+
+    //read user's email address from browser storage
+    const theEmail = JSON.parse(this.storage.getItem('userEmail')!);
     
     this.checkoutFormGroup = this.formBuilder.group({
 
@@ -52,7 +57,7 @@ export class CheckoutComponent implements OnInit {
                                 [Validators.required, 
                                 Validators.minLength(2),
                                 Luv2ShopValidators.notOnlyWhitespace]),
-        email: new FormControl('',
+        email: new FormControl(theEmail,
                                 [Validators.required, 
                                 Validators.pattern('^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$')])
       }),
