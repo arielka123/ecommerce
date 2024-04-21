@@ -14,6 +14,7 @@ export class CartService {
 
   // storage: Storage = sessionStorage;
   storage: Storage = localStorage;
+  static cartItems: never[];
 
   constructor() { 
     //read the data for storage
