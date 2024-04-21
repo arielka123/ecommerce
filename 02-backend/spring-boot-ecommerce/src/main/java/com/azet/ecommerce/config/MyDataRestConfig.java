@@ -1,9 +1,6 @@
 package com.azet.ecommerce.config;
 
-import com.azet.ecommerce.entity.Country;
-import com.azet.ecommerce.entity.Product;
-import com.azet.ecommerce.entity.ProductCategory;
-import com.azet.ecommerce.entity.State;
+import com.azet.ecommerce.entity.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.metamodel.EntityType;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,6 +42,8 @@ class MyDataRestConfig implements RepositoryRestConfigurer {
         disableHttpMethods(Country.class, config, theUnsupportedActions);
 
         disableHttpMethods(State.class, config, theUnsupportedActions);
+
+        disableHttpMethods(Order.class, config, theUnsupportedActions);
 
         //call an internal helper method to expose id's
 
