@@ -33,7 +33,6 @@ class SecurityConfiguration {
                             new HeaderContentNegotiationStrategy());
 
 
-
         // + non-empty response body for 401 (more friendly)
         Okta.configureResourceServer401ResponseBody(http);
 
