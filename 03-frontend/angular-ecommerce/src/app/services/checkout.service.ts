@@ -3,6 +3,7 @@ import { Inject, Injectable, inject } from '@angular/core';
 import { Purchase } from '../common/purchase';
 import { Observable } from 'rxjs';
 import { CartService } from './cart.service';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class CheckoutService {
   storage: Storage = localStorage;
 
 
-  private purchaseUrl = "http://localhost:8080/api/checkout/purchase";
+  private purchaseUrl = environment.luv2ShopApiUrl + "/checkout/purchase";
 
   constructor(private httpClient: HttpClient, cartService: CartService) {
     this.theCartService = cartService;
