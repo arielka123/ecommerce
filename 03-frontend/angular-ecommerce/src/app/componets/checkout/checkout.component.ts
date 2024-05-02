@@ -11,6 +11,8 @@ import { Order } from 'src/app/common/order';
 import { OrderItem } from 'src/app/common/order-item';
 import { Purchase } from 'src/app/common/purchase';
 import { JsonPipe } from '@angular/common';
+import { environment } from 'src/environments/environment';
+import { PaymentInfo } from 'src/app/common/payment-info';
 
 @Component({
   selector: 'app-checkout',
@@ -33,6 +35,16 @@ export class CheckoutComponent implements OnInit {
 
   storage: Storage = sessionStorage;
 
+  //initialize stripe API
+  stripe = Stripe(environment.stripePublishableKey);
+
+  paymentInfo: PaymentInfo = new PaymentInfo();
+  cardElement: any;
+  displayError: any;
+
+
+
+
   constructor(private formBuilder: FormBuilder, 
               private Luv2ShopFormService: Luv2ShopFormService,
               private cartService: CartService,
@@ -40,6 +52,9 @@ export class CheckoutComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit(): void {
+
+    //setup stripe payment form
+    this.setupStripePaymentForm();
 
     this.reviewCardDetails(); 
 
@@ -86,16 +101,17 @@ export class CheckoutComponent implements OnInit {
       }),
 
       creditCard: this.formBuilder.group({
-        cardType: new FormControl('', [Validators.required]),
-        nameOnCard: new FormControl('', [Validators.required, Validators.minLength(2), 
-                                        Luv2ShopValidators.notOnlyWhitespace]),
-        cardNumber: new FormControl('', [Validators.required, Validators.pattern('[0-9]{16}')]),
-        securityCode: new FormControl('', [Validators.required, Validators.pattern('[0-9]{3}')]),
-        expirationMonth: [''],
-        expirationYear: ['']
+        // cardType: new FormControl('', [Validators.required]),
+        // nameOnCard: new FormControl('', [Validators.required, Validators.minLength(2), 
+        //                                 Luv2ShopValidators.notOnlyWhitespace]),
+        // cardNumber: new FormControl('', [Validators.required, Validators.pattern('[0-9]{16}')]),
+        // securityCode: new FormControl('', [Validators.required, Validators.pattern('[0-9]{3}')]),
+        // expirationMonth: [''],
+        // expirationYear: ['']
       })
     });
 
+    /*
     //populate credit card months
     const startMonth : number = new Date().getMonth() + 1;
     console.log("startMonth: " + startMonth);
@@ -114,6 +130,7 @@ export class CheckoutComponent implements OnInit {
           this.creditCardYears = data;
         }
       );
+      */
 
       //populate countries
       this.Luv2ShopFormService.getCountries().subscribe(
@@ -122,7 +139,37 @@ export class CheckoutComponent implements OnInit {
           this.countries = data;
         }
       );
+    
   }
+
+  setupStripePaymentForm() {
+    //get a handle to stripe elements
+    var elements = this.stripe.elements();
+
+    //crerate card element .. and hide zip-code field
+    this.cardElement = elements.create('card', { hidePostalCode: true });
+
+    //add an instance of card ui component into the card-element div
+    this.cardElement.mount('#card-element');
+
+    //add event binding for the change event on card element
+    this.cardElement.on('change', (event: any) => {
+
+      //get a handle to card-errors element
+      this.displayError = document.getElementById('card-errors');
+
+
+      if(event.complete){
+        this.displayError.textContent = "";
+      }
+      else if(event.error){
+        //show validation error to customer
+        this.displayError.textContent = event.error.message;
+      }
+
+    });
+  }
+
   reviewCardDetails() {
 
     //subscrive card service totalQuantity
