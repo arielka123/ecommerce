@@ -293,7 +293,56 @@ export class CheckoutComponent implements OnInit {
     purchase.order = order;
     purchase.orderItems = orderItems;
 
-    //call reat api via checkoutService
+    //compute payment info
+    this.paymentInfo.amount = this.totalPrice * 100;
+    this.paymentInfo.currency = "USD";
+
+    //if valid for then
+    //-create payment intent
+    //-confirm card payment
+    //-place order
+
+    if(!this.checkoutFormGroup.invalid && this.displayError.textContent === "") {
+
+      this.checkoutService.createPaymentIntent(this.paymentInfo).subscribe(
+        (paymentIntentResponse) => {
+          this.stripe.confirmCardPayment(paymentIntentResponse.client_secret,
+            {
+              payment_method: {
+                  card: this.cardElement
+                }
+            }, { handleActions: false })
+            .then((result:any) => {
+              if(result.error){
+                //inform the customer there was an error
+                alert(`There was an error: ${result.error.message}`);
+              }
+              else {
+                //call rest api via the checkoutService
+                this.checkoutService.placeOrder(purchase).subscribe({
+                    next: (response: any) => {
+                      alert(`Your order has been received. \nOrder Tracking number: ${response.orderTrackingNumber}`);
+
+                      //reset cart
+
+                      this.resetCart();
+                    },
+                    error: (err: any) => {
+                      alert(`There was an error: ${err.message}`);
+                    }
+                  }
+                )
+              }
+            });
+         }
+      );
+    } else{
+      this.checkoutFormGroup.markAllAsTouched();
+      return;
+    }
+
+/*
+    //call rest api via checkoutService
     this.checkoutService.placeOrder(purchase).subscribe(
       {
         next: response => { 
@@ -307,8 +356,9 @@ export class CheckoutComponent implements OnInit {
           alert(`There was an error: ${err.message}`)
         }
       }
+    
     );
-
+  */
 
     // console.log(this.checkoutFormGroup.get('customer')?.value);
     // console.log("The email address is  " + this.checkoutFormGroup.get('customer')?.value.email);
