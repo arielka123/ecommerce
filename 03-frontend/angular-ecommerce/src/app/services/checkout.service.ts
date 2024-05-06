@@ -25,7 +25,7 @@ export class CheckoutService {
 
   placeOrder(purchase: Purchase): Observable<any> {
     // this.theCartService.cartItems = [];
-    this.storage.clear();
+    // this.storage.clear();
     
     return this.httpClient.post<Purchase>(this.purchaseUrl, purchase);
   }
