@@ -294,8 +294,10 @@ export class CheckoutComponent implements OnInit {
     purchase.orderItems = orderItems;
 
     //compute payment info
-    this.paymentInfo.amount = this.totalPrice * 100;
+    this.paymentInfo.amount = Math.round(this.totalPrice * 100);
     this.paymentInfo.currency = "USD";
+
+    console.log(`paymentInfo: ${this.paymentInfo.amount}`)
 
     //if valid for then
     //-create payment intent
